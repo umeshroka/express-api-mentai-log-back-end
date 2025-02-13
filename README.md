@@ -1,9 +1,3 @@
-# Express JWT Auth Template
-
-## About
-
-This repo is an Express JWT Auth template meant to be paired with a front-end app utilizing JWT tokens.
-
 ## Getting started
 
 Fork and clone this repository to your local machine.
