@@ -1,51 +1,37 @@
 const mongoose = require("mongoose");
 
-const emotionSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: true,
-  },
-});
-
-const sentimentSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: true,
-  },
-});
-
-const keywordSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: true,
-  },
-});
-
-const entitiesSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: true,
-  },
-});
-
 const logSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-    },
-    text: {
-      type: String,
-      required: true,
-    },
+    title: { type: String },
+    text: { type: String, required: true },
     author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    emotion: [emotionSchema],
-    sentiment: [sentimentSchema],
-    keyword: [keywordSchema],
-    entities: [entitiesSchema],
+    analysis: {
+      emotions: {
+        sadness: { type: Number },
+        joy: { type: Number },
+        fear: { type: Number },
+        disgust: { type: Number },
+        anger: { type: Number },
+      },
+      sentiment: {
+        score: { type: Number },
+        label: { type: String },
+      },
+      keywords: [
+        {
+          type: String,
+        },
+      ],
+      entities: [
+        {
+          type: String,
+        },
+      ],
+    },
   },
   { timestamps: true }
 );
 
-const log = mongoose.model("log", logSchema);
+const Log = mongoose.model("log", logSchema);
 
-module.exports = log;
+module.exports = Log;

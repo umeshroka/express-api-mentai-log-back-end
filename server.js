@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const app = express();
-const port = process.env.port || 4000;
 const mongoose = require('mongoose');
 const cors = require('cors');
 const logger = require('morgan');
@@ -26,15 +25,12 @@ app.use(express.json());
 app.use(logger('dev'));
 
 // Routes
-app.get('/', (req,res) => {
-  res.send("Hello, world!")
-});
-
+app.use('/', console.log("Hello, I am the back end"));
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use("/logs", logsRouter);
 
 // Start the server and listen on port 3000
-app.listen(port, () => {
+app.listen(3000, () => {
   console.log('The express app is ready!');
 });
