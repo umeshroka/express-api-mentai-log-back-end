@@ -17,16 +17,8 @@ const logSchema = new mongoose.Schema(
         score: { type: Number },
         label: { type: String },
       },
-      keywords: [
-        {
-          type: String,
-        },
-      ],
-      entities: [
-        {
-          type: String,
-        },
-      ],
+      keywords: { type: String },
+      entities: { type: String },
     },
   },
   { timestamps: true }

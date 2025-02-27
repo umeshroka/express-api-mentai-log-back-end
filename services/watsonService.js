@@ -18,8 +18,8 @@ const analyseText = async (text) => {
       text: text,
       features: {
         emotion: { document: true },
-        entities: { limit: 3},
-        keywords: { limit: 3},
+        entities: { limit: 1},
+        keywords: { limit: 1},
         sentiment: { document: true},
       },
     });

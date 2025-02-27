@@ -17,8 +17,8 @@ router.post("/", verifyToken, async (req, res) => {
 
     const emotions = analysis.emotion?.document?.emotion || {};
     const sentiment = analysis.sentiment?.document || {};
-    const keywords = analysis.keywords?.map((kw) => kw.text) || [];
-    const entities = analysis.entities?.map((ent) => ent.text) || [];
+    const keywords = analysis.keywords?.[0]?.text || "";
+    const entities = analysis.entities?.[0]?.text || "";
 
     const log = await Log.create({
       title: req.body.title,
@@ -83,8 +83,8 @@ router.put("/:logId", verifyToken, async (req, res) => {
       // Extract data from Watson's response
       const emotions = analysis.emotion?.document?.emotion || {};
       const sentiment = analysis.sentiment?.document || {};
-      const keywords = analysis.keywords?.map((kw) => kw.text) || [];
-      const entities = analysis.entities?.map((ent) => ent.text) || [];
+      const keywords = analysis.keywords?.[0]?.text || "";
+      const entities = analysis.entities?.[0]?.text || "";
 
       // Update the log with the new data
       updatedLog = await Log.findByIdAndUpdate(
@@ -132,63 +132,5 @@ router.delete("/:logId", verifyToken, async (req, res) => {
   }
 });
 
-// router.post("/:logId/comments", verifyToken, async (req, res) => {
-//   try {
-//     req.body.author = req.user._id;
-//     const log = await Log.findById(req.params.logId);
-//     log.comments.push(req.body);
-//     await log.save();
-
-//     // Find the newly created comment:
-//     const newComment = log.comments[log.comments.length - 1];
-
-//     newComment._doc.author = req.user;
-
-//     // Respond with the newComment:
-//     res.status(201).json(newComment);
-//   } catch (err) {
-//     res.status(500).json({ err: err.message });
-//   }
-// });
-
-// router.put("/:logId/comments/:commentId", verifyToken, async (req, res) => {
-//   try {
-//     const log = await log.findById(req.params.logId);
-//     const comment = log.comments.id(req.params.commentId);
-
-//     // ensures the current user is the author of the comment
-//     if (comment.author.toString() !== req.user._id) {
-//       return res
-//         .status(403)
-//         .json({ message: "You are not authorized to edit this comment" });
-//     }
-
-//     comment.text = req.body.text;
-//     await log.save();
-//     res.status(200).json({ message: "Comment updated successfully" });
-//   } catch (err) {
-//     res.status(500).json({ err: err.message });
-//   }
-// });
-
-// router.delete("/:logId/comments/:commentId", verifyToken, async (req, res) => {
-//   try {
-//     const log = await log.findById(req.params.logId);
-//     const comment = log.comments.id(req.params.commentId);
-
-//     // ensures the current user is the author of the comment
-//     if (comment.author.toString() !== req.user._id) {
-//       return res
-//         .status(403)
-//         .json({ message: "You are not authorized to edit this comment" });
-//     }
-
-//     log.comments.remove({ _id: req.params.commentId });
-//     await log.save();
-//     res.status(200).json({ message: "Comment deleted successfully" });
-//   } catch (err) {
-//     res.status(500).json({ err: err.message });
-//   }
-// });
 
 module.exports = router;

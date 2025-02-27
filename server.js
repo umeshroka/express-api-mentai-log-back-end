@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(logger('dev'));
 
 // Routes
-app.use('/', console.log("Hello, I am the back end"));
+
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use("/logs", logsRouter);
