@@ -22,8 +22,8 @@ Essentially, the user logs a written journal everyday. The app analyses the jour
 
 ## Deployed App Link Deliverable
 
-[Deployed front-end project link] : (link)
-[Deployed back-end project link] : (https://express-api-journal-back-end.onrender.com)
+- [Deployed front-end project link] : (link)
+- [Deployed back-end project link] : (https://express-api-journal-back-end.onrender.com)
 
 ## Attributions
 
