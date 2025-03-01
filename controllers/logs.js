@@ -40,7 +40,7 @@ router.post("/", verifyToken, async (req, res) => {
 
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const logs = await Log.find({})
+    const logs = await Log.find({ author: req.user._id })
       .populate("author")
       .sort({ createdAt: "desc" });
     res.status(200).json(logs);
@@ -52,6 +52,11 @@ router.get("/", verifyToken, async (req, res) => {
 router.get("/:logId", verifyToken, async (req, res) => {
   try {
     const log = await Log.findById(req.params.logId).populate("author");
+
+    // Check permissions:
+    if (!log.author.equals(req.user._id)) {
+      return res.status(403).send("Unauthorized");
+    }
     res.status(200).json(log);
   } catch (err) {
     res.status(500).json({ err: err.message });
@@ -63,59 +68,41 @@ router.put("/:logId", verifyToken, async (req, res) => {
     // Find the log:
     const log = await Log.findById(req.params.logId);
 
-    // Check permissions:
+    // Check if the logged-in user is the owner:
     if (!log.author.equals(req.user._id)) {
-      return res.status(403).send("You're not allowed to do that!");
+      return res.status(403).json({ error: "You're not allowed to do that!" });
     }
 
-    // Update log:
-    // Check if the text has changed
-    const updatedText = req.body.text || log.text;
-    let updatedLog = log;
+    // Destructure only allowed fields:
+    const { title, text } = req.body;
+    let updatedLogData = { title };
 
-    if (updatedText !== log.text) {
-      // Text has changed, so reanalyze it
-      const analysis = await analyseText(updatedText);
+    // If text is changed, reanalyze:
+    if (text && text !== log.text) {
+      const analysis = await analyseText(text);
       if (!analysis) {
         return res.status(500).json({ error: "Failed to analyze text" });
       }
 
-      // Extract data from Watson's response
-      const emotions = analysis.emotion?.document?.emotion || {};
-      const sentiment = analysis.sentiment?.document || {};
-      const keywords = analysis.keywords?.[0]?.text || "";
-      const entities = analysis.entities?.[0]?.text || "";
-
-      // Update the log with the new data
-      updatedLog = await Log.findByIdAndUpdate(
-        req.params.logId,
-        {
-          ...req.body,
-          analysis: {
-            emotions,
-            sentiment,
-            keywords,
-            entities,
-          },
-        },
-        { new: true }
-      );
-    } else {
-      // If the text hasn't changed, just update other fields
-      updatedLog = await Log.findByIdAndUpdate(req.params.logId, req.body, {
-        new: true,
-      });
+      updatedLogData.text = text;
+      updatedLogData.analysis = {
+        emotions: analysis.emotion?.document?.emotion || {},
+        sentiment: analysis.sentiment?.document || {},
+        keywords: analysis.keywords?.[0]?.text || "",
+        entities: analysis.entities?.[0]?.text || "",
+      };
     }
 
-    // Append req.user to the author property:
-    updatedLog._doc.author = req.user;
+    // Update the log:
+    const updatedLog = await Log.findByIdAndUpdate(req.params.logId, updatedLogData, { new: true }).populate("author");
 
-    // Issue JSON response:
+    // Send JSON response:
     res.status(200).json(updatedLog);
   } catch (err) {
-    res.status(500).json({ err: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
+
 
 router.delete("/:logId", verifyToken, async (req, res) => {
   try {
@@ -131,6 +118,5 @@ router.delete("/:logId", verifyToken, async (req, res) => {
     res.status(500).json({ err: err.message });
   }
 });
-
 
 module.exports = router;

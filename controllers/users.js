@@ -26,27 +26,19 @@ router.get("/:userId", verifyToken, async (req, res) => {
 
     const emotionsData = logs.map((log) => ({
       date: log.createdAt.toISOString().split("T")[0],
-      joy: log.analysis.emotions.joy,
-      sadness: log.analysis.emotions.sadness,
-      fear: log.analysis.emotions.fear,
-      disgust: log.analysis.emotions.disgust,
-      anger: log.analysis.emotions.anger,
+      emotions: log.analysis.emotions,
     }));
 
     const countOccurrences = (items) => {
-      const counts = {};
-      items.forEach((item) => {
-        if (item) counts[item] = (counts[item] || 0) + 1;
-      });
-      return counts;
+      return items.flatMap((item) => item || []).reduce((acc, item) => {
+        acc[item] = (acc[item] || 0) + 1;
+        return acc;
+      }, {});
     };
 
-    const keywordData = countOccurrences(
-      logs.map((log) => log.analysis.keywords)
-    );
-    const entityData = countOccurrences(
-      logs.map((log) => log.analysis.entities)
-    );
+    const keywordData = countOccurrences(logs.flatMap((log) => log.analysis.keywords));
+    const entityData = countOccurrences(logs.flatMap((log) => log.analysis.entities));
+
 
     res.json({ sentimentData, emotionsData, keywordData, entityData });
   } catch (err) {
