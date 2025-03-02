@@ -13,17 +13,17 @@ Essentially, the user logs a written journal everyday. The app analyses the jour
 
 ## Project Planning Deliverable
 
-[Project planning link] (https://trello.com/b/Z9Le2R5e/project3)
+- [Project planning link] : (https://trello.com/b/Z9Le2R5e/project3)
 
 ## Github Repo Deliverables
 
-[Front-end GitHub repo link] (https://github.com/cangelic001/react-mentai-log-front-end)
-[Back-end GitHub repo link] (https://github.com/umeshroka/express-api-mentai-log-back-end)
+- [Front-end GitHub repo link] : (https://github.com/cangelic001/react-mentai-log-front-end)
+- [Back-end GitHub repo link] : (https://github.com/umeshroka/express-api-mentai-log-back-end)
 
 ## Deployed App Link Deliverable
 
-[Deployed front-end project link] (link)
-[Deployed back-end project link] (https://express-api-journal-back-end.onrender.com)
+- [Deployed front-end project link] : (link)
+- [Deployed back-end project link] : (https://express-api-journal-back-end.onrender.com)
 
 ## Attributions
 
