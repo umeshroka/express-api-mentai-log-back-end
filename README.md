@@ -22,7 +22,7 @@ Essentially, the user logs a written journal everyday. The app analyses the jour
 
 ## Deployed App Link Deliverable
 
-- [Deployed front-end project link] : (link)
+- [Deployed front-end project link] : (https://react-mentai-log-front-end.vercel.app/)
 - [Deployed back-end project link] : (https://express-api-journal-back-end.onrender.com)
 
 ## Attributions
@@ -30,6 +30,8 @@ Essentially, the user logs a written journal everyday. The app analyses the jour
 ## Technologies Used
 
 ## Stretch Goals
+
+Incorporate search in the loglist. Allows the user to look back and search for logs.
 
 We want to have dynamic feedback to the user based on their mood trends using LLM which has been prompted to provide safe, proven and professional advice. Or we can hardcode some feedback.
 

@@ -32,7 +32,9 @@ router.post("/", verifyToken, async (req, res) => {
       },
     });
 
-    res.status(201).json(log);
+    const populatedLog = await Log.findById(log._id).populate("author");
+
+    res.status(201).json(populatedLog);
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
